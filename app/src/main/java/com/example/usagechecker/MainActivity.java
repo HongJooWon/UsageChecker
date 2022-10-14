@@ -3,6 +3,8 @@ package com.example.usagechecker;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.Activity;
 import android.app.KeyguardManager;
 import android.app.AppOpsManager;
 import android.app.usage.UsageEvents;
@@ -15,6 +17,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.util.LongSparseArray;
 import android.view.Display;
 import android.view.View;
@@ -24,12 +27,14 @@ public class MainActivity extends AppCompatActivity {
 
     CheckPackageNameThread checkPackageNameThread;
 
+    private Context mContext;
+
+
     boolean operation = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
 
         // 버튼 정의
@@ -72,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     // 현재 포그라운드 앱 패키지 로그로 띄우는 함수
-    private class CheckPackageNameThread extends Thread{
+    public class CheckPackageNameThread extends Thread{
 
         public void run(){
             // operation == true 일때만 실행
@@ -86,14 +91,15 @@ public class MainActivity extends AppCompatActivity {
 
                 try {
                     // 5초마다 패키치 이름을 로그창에 출력
-                    UsageEvents.Event event_check = new UsageEvents.Event();
                     
                     //화면 사용하지 않을 경우 실행 정지
-//                    if(isScreenOn(event_check)){
-//                        operation = false;
-//                    } else {
-//                        operation = true;
-//                    }
+                    if(isScreenOn()){
+                        Log.v("Usage", "Using");
+                        operation = true;
+                    } else {
+                        Log.v("Usage", "Not Using");
+                        operation = false;
+                    }
                         sleep(3000);
 
                 } catch (InterruptedException e) {
@@ -104,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    // 권환 체크
+    // 권한 체크
     private boolean checkPermission(){
 
         boolean granted = false;
@@ -175,17 +181,16 @@ public class MainActivity extends AppCompatActivity {
         return packageNameMap.get(lastRunAppTimeStamp, "").toString();
     }
 
-//    public static boolean isScreenOn(UsageEvents.Event event) {
-//
-//        DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
-//        for (Display display : dm.getDisplays()) {
-//            if (display.getState() != Display.STATE_OFF) {
-//                return true;
-//            }
-//        }
-//        return false;
-//
-//    }
+    public boolean isScreenOn() {
+
+        DisplayManager dm = (DisplayManager) this.getSystemService(Context.DISPLAY_SERVICE);
+        for (Display display : dm.getDisplays()) {
+            if (display.getState() != Display.STATE_OFF) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     // 앱이 포그라운드 상태인지 체크
     private static boolean isForeGroundEvent(UsageEvents.Event event) {
