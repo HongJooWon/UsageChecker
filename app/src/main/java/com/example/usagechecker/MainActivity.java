@@ -3,10 +3,11 @@ package com.example.usagechecker;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationManagerCompat;
 
-import android.app.Activity;
-import android.app.KeyguardManager;
 import android.app.AppOpsManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.usage.UsageEvents;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
@@ -17,63 +18,152 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import androidx.core.app.NotificationCompat;
 import android.util.Log;
 import android.util.LongSparseArray;
 import android.view.Display;
 import android.view.View;
-import android.widget.Button;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
+import android.widget.Spinner;
+import android.widget.Switch;
 
 public class MainActivity extends AppCompatActivity {
 
     CheckPackageNameThread checkPackageNameThread;
 
     private Context mContext;
+    //Notification Channel
+//    private static String CHANNEL_ID;
+//    private static final String CHANNEL_NAME = "Time Notification";
+//    private static final String CHANNE_DESC = "Time Notification";
 
+    private NotificationManagerCompat notificationManager;
+
+    String[] items = {"5min","10min","15min","20min","25min","30min"};
+    int[] times = {3,60,90,120,150,180};
+    int selectedTime;
+    int nowTime=0;
+
+    private void createNotificationsChannels(){
+        if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.O){
+            NotificationChannel channel = new NotificationChannel(
+                    "Notification",
+                    "Notification",
+                    NotificationManager.IMPORTANCE_DEFAULT
+            );
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(channel);
+        }
+    }
+
+
+    //Notification Method
+    private void displayNotification(){
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this,"Notification")
+                .setSmallIcon(R.drawable.gold)
+                .setContentTitle("From TIG")
+                .setContentText("You should stop Using your Phone!")
+                .setPriority(androidx.core.app.NotificationCompat.PRIORITY_DEFAULT)
+                .setAutoCancel(true);
+
+        NotificationManagerCompat managerCompat = NotificationManagerCompat.from(MainActivity.this);
+        managerCompat.notify(1,builder.build());
+    }
 
     boolean operation = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        notificationManager = NotificationManagerCompat.from(this);
+
+        createNotificationsChannels();
 
         // 버튼 정의
-        Button start_button = findViewById(R.id.start_button);
-        Button end_button = findViewById(R.id.end_button);
+        //Button start_button = findViewById(R.id.start_button);
+        //Button end_button = findViewById(R.id.end_button);
 
-
-        // 시작 버튼 이벤트
-        start_button.setOnClickListener(new View.OnClickListener() {
+        Switch sw = (Switch)findViewById(R.id.sw);
+        sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View view) {
-
-                // 권환 허용이 안되어 있으면 권환 설정창으로 이동
-                if(!checkPermission()) {
-                    Intent PermissionIntent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS, Uri.parse("package:" + getPackageName()));
-                    startActivity(PermissionIntent);
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if(isChecked){
+                    if(!checkPermission()) {
+                        Intent PermissionIntent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS, Uri.parse("package:" + getPackageName()));
+                        startActivity(PermissionIntent);
+                    }
+                    // 권환 허용 되어 있으면 현재 포그라운드 앱 패키지 로그로 띄운다.
+                    else{
+                        //SCREEN_INTERACTIVE
+                        operation = true;
+                        checkPackageNameThread = new CheckPackageNameThread();
+                        checkPackageNameThread.start();
+                    }
+                }else {
+                    operation = false;
                 }
-                // 권환 허용 되어 있으면 현재 포그라운드 앱 패키지 로그로 띄운다.
-                else{
-                    //SCREEN_INTERACTIVE
-                    operation = true;
-                    checkPackageNameThread = new CheckPackageNameThread();
-                    checkPackageNameThread.start();
-                }
-
             }
         });
 
-        // 종료 버튼 이벤트
-        end_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        // 시작 버튼 이벤트
+//            start_button.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//
+//                    // 권환 허용이 안되어 있으면 권환 설정창으로 이동
+//                    if(!checkPermission()) {
+//                        Intent PermissionIntent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS, Uri.parse("package:" + getPackageName()));
+//                        startActivity(PermissionIntent);
+//                    }
+//                    // 권환 허용 되어 있으면 현재 포그라운드 앱 패키지 로그로 띄운다.
+//                    else{
+//                        //SCREEN_INTERACTIVE
+//                        operation = true;
+//                        checkPackageNameThread = new CheckPackageNameThread();
+//                        checkPackageNameThread.start();
+//                    }
+//
+//                }
+//            });
 
-                operation = false;
+        // 종료 버튼 이벤트
+//        end_button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                operation = false;
+//            }
+    //});
+
+        //Spinner UI set
+        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                this, android.R.layout.simple_spinner_item,items
+        );
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+
+            @Override
+            public void  onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                selectedTime =times[i];
             }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                selectedTime =times[0];
+            }
         });
 
     }
+
+
+
+
 
 
     // 현재 포그라운드 앱 패키지 로그로 띄우는 함수
@@ -95,17 +185,26 @@ public class MainActivity extends AppCompatActivity {
                     //화면 사용하지 않을 경우 실행 정지
                     if(isScreenOn()){
                         Log.v("Usage", "Using");
+                        Log.v("time is", "Time is"+nowTime);
                         operation = true;
                     } else {
                         Log.v("Usage", "Not Using");
                         operation = false;
                     }
                         sleep(3000);
+                        nowTime +=3;
+                        if(nowTime == selectedTime){
+                        //alarm and allocate nowTime to 0;
+                        displayNotification();
+                        nowTime=0;
+                        }
+                        Log.v("time is", "Time is"+nowTime);
 
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
+
         }
     }
 
@@ -205,5 +304,4 @@ public class MainActivity extends AppCompatActivity {
 
         return event.getEventType() == UsageEvents.Event.MOVE_TO_FOREGROUND;
     }
-
 }

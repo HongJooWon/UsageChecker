@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">UsageChecker</string>
+    <string name="app_name">T.I.G</string>
     <string name="open_app_usage_setting">Open Apps with usage access settings</string>
     <string name="last_time_used">"Last time used: "</string>
     <string name="time_span">"Time span: "</string>
@@ -9,4 +9,8 @@
     <string name="last_time_used_label">Last time used</string>
     <!-- label for usage time -->
     <string name="usage_time_label">Usage time</string>
+
+    <string name="sw">switch</string>
+    <string name="off">off</string>
+    <string name="on">on</string>
 </resources>
