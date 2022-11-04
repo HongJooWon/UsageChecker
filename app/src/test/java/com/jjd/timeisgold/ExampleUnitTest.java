@@ -1,4 +1,4 @@
-package com.example.usagechecker;
+package com.jjd.timeisgold;
 
 import org.junit.Test;
 

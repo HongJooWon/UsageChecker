@@ -1,10 +1,9 @@
-package com.example.usagechecker;
+package com.jjd.timeisgold;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationManagerCompat;
-
 import android.app.AppOpsManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -38,11 +37,10 @@ public class MainActivity extends AppCompatActivity {
 //    private static String CHANNEL_ID;
 //    private static final String CHANNEL_NAME = "Time Notification";
 //    private static final String CHANNE_DESC = "Time Notification";
-
     private NotificationManagerCompat notificationManager;
 
     String[] items = {"5min","10min","15min","20min","25min","30min"};
-    int[] times = {3,60,90,120,150,180};
+    int[] times = {300,600,900,1200,1500,1800};
     int selectedTime;
     int nowTime=0;
 
