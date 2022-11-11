@@ -1,15 +1,18 @@
 package com.jjd.timeisgold;
 
+
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationManagerCompat;
 import android.app.AppOpsManager;
+import android.app.Dialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.usage.UsageEvents;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.display.DisplayManager;
@@ -27,6 +30,10 @@ import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.Toast;
+import android.app.AlertDialog;
+
+import com.google.firebase.components.BuildConfig;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private NotificationManagerCompat notificationManager;
 
     String[] items = {"5min","10min","15min","20min","25min","30min"};
-    int[] times = {300,600,900,1200,1500,1800};
+    int[] times = {6,600,900,1200,1500,1800};
     int selectedTime;
     int nowTime=0;
 
@@ -69,6 +76,28 @@ public class MainActivity extends AppCompatActivity {
         NotificationManagerCompat managerCompat = NotificationManagerCompat.from(MainActivity.this);
         managerCompat.notify(1,builder.build());
     }
+
+    //Alert Dialog Function
+    void showDialog() {
+        AlertDialog.Builder msgBuilder = new AlertDialog.Builder(MainActivity.this)
+                .setTitle("TimeIsGold")
+                .setMessage("You Should Stop Using Your Phone")
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finish();
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+        AlertDialog msgDlg = msgBuilder.create();
+        msgDlg.show();
+    }
+
 
     boolean operation = false;
 
@@ -194,6 +223,8 @@ public class MainActivity extends AppCompatActivity {
                         if(nowTime == selectedTime){
                         //alarm and allocate nowTime to 0;
                         displayNotification();
+                        //여기에 작동시킬 함수 넣기
+                        showDialog();
                         nowTime=0;
                         }
                         Log.v("time is", "Time is"+nowTime);

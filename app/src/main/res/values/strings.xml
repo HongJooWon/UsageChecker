@@ -13,4 +13,6 @@
     <string name="sw">switch</string>
     <string name="off">off</string>
     <string name="on">on</string>
+
+    <string name="button">button</string>
 </resources>
