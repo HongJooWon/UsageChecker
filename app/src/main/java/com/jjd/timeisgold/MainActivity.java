@@ -2,11 +2,9 @@ package com.jjd.timeisgold;
 
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationManagerCompat;
 import android.app.AppOpsManager;
-import android.app.Dialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.usage.UsageEvents;
@@ -27,29 +25,41 @@ import android.view.Display;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.Switch;
-import android.widget.Toast;
 import android.app.AlertDialog;
 
+//파이어베이스 메소드 라이브러리
 import com.google.firebase.components.BuildConfig;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 
 public class MainActivity extends AppCompatActivity {
 
+    // 파이어베이스 데이터베이스 연동
+    private FirebaseAnalytics analytics;
+
     CheckPackageNameThread checkPackageNameThread;
+
+    DBHelper dbHelper;
 
     private Context mContext;
     //Notification Channel
 //    private static String CHANNEL_ID;
 //    private static final String CHANNEL_NAME = "Time Notification";
-//    private static final String CHANNE_DESC = "Time Notification";
+//    private static final String CHANNEL_DESC = "Time Notification";
     private NotificationManagerCompat notificationManager;
 
     String[] items = {"5min","10min","15min","20min","25min","30min"};
-    int[] times = {6,600,900,1200,1500,1800};
+    int[] times = {300,600,900,1200,1500,1800};
     int selectedTime;
     int nowTime=0;
+    int totalTime = 0;
+    String packinfo = "";
 
     private void createNotificationsChannels(){
         if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.O){
@@ -103,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -110,27 +121,64 @@ public class MainActivity extends AppCompatActivity {
 
         createNotificationsChannels();
 
+        //데이터 베이스 오브젝트 생성
+        dbHelper = new DBHelper(MainActivity.this, 1);
+        analytics = FirebaseAnalytics.getInstance(this);
+
+
+
+
+
         // 버튼 정의
         //Button start_button = findViewById(R.id.start_button);
-        //Button end_button = findViewById(R.id.end_button);
+        Button sbtn = (Button)findViewById(R.id.sbtn);
+
+        //통계 버튼을 누르면 DB접근
+        sbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //에딧 텍스트 값을 문자열로 바꾸어 함수에 넣어줍니다.
+                packinfo = getPackageName(MainActivity.this);
+//                String[] sp_string = packinfo.split(" ");
+//                int beginIndex = sp_string[2].lastIndexOf("/");
+//                int endIndex = sp_string[2].length();
+//                String packname = sp_string[2].substring(beginIndex, endIndex);
+                Log.v("pack name", packinfo);
+
+
+
+//              AddTime(android_id, packname, time, totalTime);
+            }
+        });
 
         Switch sw = (Switch)findViewById(R.id.sw);
         sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                Bundle bundle = new Bundle(); // logEvent()까지 추가
+
+
                 if(isChecked){
+                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "switch on");
+                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "Switch handling");
+                    analytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
+
                     if(!checkPermission()) {
                         Intent PermissionIntent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS, Uri.parse("package:" + getPackageName()));
                         startActivity(PermissionIntent);
                     }
                     // 권환 허용 되어 있으면 현재 포그라운드 앱 패키지 로그로 띄운다.
                     else{
+
                         //SCREEN_INTERACTIVE
                         operation = true;
                         checkPackageNameThread = new CheckPackageNameThread();
                         checkPackageNameThread.start();
                     }
                 }else {
+                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "switch off");
+                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "Switch handling");
+                    analytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
                     operation = false;
                 }
             }
@@ -192,7 +240,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
     // 현재 포그라운드 앱 패키지 로그로 띄우는 함수
     public class CheckPackageNameThread extends Thread{
 
@@ -204,7 +251,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                 // 현재 포그라운드 앱 패키지 이름 가져오기
-                System.out.println(getPackageName(getApplicationContext()));
+//                System.out.println(getPackageName(getApplicationContext()));
 
                 try {
                     // 5초마다 패키치 이름을 로그창에 출력
@@ -220,14 +267,20 @@ public class MainActivity extends AppCompatActivity {
                     }
                         sleep(3000);
                         nowTime +=3;
+                        //지정 시간마다 데이터 베이스 업데이트
+                        dbHelper.Update(getPackageName(MainActivity.this));
                         if(nowTime == selectedTime){
-                        //alarm and allocate nowTime to 0;
-                        displayNotification();
-                        //여기에 작동시킬 함수 넣기
-                        showDialog();
-                        nowTime=0;
+                            //alarm and allocate nowTime to 0;
+                            displayNotification();
+                            //여기에 작동시킬 함수 넣기
+                            runOnUiThread(new Runnable(){
+                                @Override
+                                public void run() {
+                                    showDialog();
+                                }
+                            });
+                            nowTime=0;
                         }
-                        Log.v("time is", "Time is"+nowTime);
 
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -262,7 +315,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     // 자신의 앱의 최소 타겟을 롤리팝 이전으로 설정
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     // 현재 포그라운드 앱 패키지를 가져오는 함수
     public static String getPackageName(@NonNull Context context) {
 
@@ -273,10 +325,10 @@ public class MainActivity extends AppCompatActivity {
         long lastRunAppTimeStamp = 0L;
 
         // fixed time as the user set
-        long user_time = 0;
+//        long user_time = 0;
 
         // 얼마만큼의 시간동안 수집한 앱의 이름을 가져오는지 정하기 (begin ~ end 까지의 앱 이름을 수집한다)
-        final long INTERVAL = 1000 * 60 * 5; // 여기다 시간 분단위 user_time로 받아서 집어넣기
+        final long INTERVAL = 1000 * 60 * 3; // 여기다 시간 분단위 user_time로 받아서 집어넣기
         final long end = System.currentTimeMillis();
         final long begin = end - INTERVAL; // 5분전
 
@@ -308,6 +360,7 @@ public class MainActivity extends AppCompatActivity {
         // 가장 마지막까지 있는 앱의 이름을 리턴해준다.
         return packageNameMap.get(lastRunAppTimeStamp, "").toString();
     }
+
 
     public boolean isScreenOn() {
 

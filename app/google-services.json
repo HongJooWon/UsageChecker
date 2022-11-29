@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1052520088485",
+    "firebase_url": "https://time-is-gold-86357-default-rtdb.firebaseio.com",
+    "project_id": "time-is-gold-86357",
+    "storage_bucket": "time-is-gold-86357.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1052520088485:android:a893ffaa5927b487a25e4c",
+        "android_client_info": {
+          "package_name": "com.jjd.timeisgold"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1052520088485-61p0f6k0jconlr4plp864j9encs6ef2s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlj36p14kJqX2mThy8yOsVFUylpYuC0OU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1052520088485-61p0f6k0jconlr4plp864j9encs6ef2s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
