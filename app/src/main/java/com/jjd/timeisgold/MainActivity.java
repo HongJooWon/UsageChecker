@@ -31,6 +31,7 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.app.AlertDialog;
 
+
 //파이어베이스 메소드 라이브러리
 import com.google.firebase.components.BuildConfig;
 import com.google.firebase.database.DatabaseReference;
@@ -146,7 +147,14 @@ public class MainActivity extends AppCompatActivity {
 
 
 //              AddTime(android_id, packname, time, totalTime);
+
+                //go to the graph activity
+                Intent myIntent = new Intent(MainActivity.this,GraphActivity.class);
+                startActivity(myIntent);
+                finish();
             }
+
+            //go the graph activity
         });
 
         Switch sw = (Switch)findViewById(R.id.sw);
@@ -233,6 +241,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
 
 
 
@@ -384,4 +393,5 @@ public class MainActivity extends AppCompatActivity {
 
         return event.getEventType() == UsageEvents.Event.MOVE_TO_FOREGROUND;
     }
+
 }
