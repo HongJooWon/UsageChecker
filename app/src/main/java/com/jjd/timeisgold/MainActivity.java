@@ -138,12 +138,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //에딧 텍스트 값을 문자열로 바꾸어 함수에 넣어줍니다.
-                packinfo = getPackageName(MainActivity.this);
-//                String[] sp_string = packinfo.split(" ");
-//                int beginIndex = sp_string[2].lastIndexOf("/");
-//                int endIndex = sp_string[2].length();
-//                String packname = sp_string[2].substring(beginIndex, endIndex);
+                packinfo = dbHelper.getMost();
                 Log.v("pack name", packinfo);
+//                Intent intent=new Intent(getApplicationContext(), Result.class);
+//                startActivity(intent);
 
 
 
@@ -161,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
                 if(isChecked){
                     bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "switch on");
                     bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "Switch handling");
-                    analytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
+                    analytics.logEvent("Switch_ON", bundle);
 
                     if(!checkPermission()) {
                         Intent PermissionIntent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS, Uri.parse("package:" + getPackageName()));
@@ -178,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
                 }else {
                     bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "switch off");
                     bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "Switch handling");
-                    analytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
+                    analytics.logEvent("Switch_Off", bundle);
                     operation = false;
                 }
             }

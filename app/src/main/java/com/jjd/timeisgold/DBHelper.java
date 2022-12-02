@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.location.Address;
 import android.util.Log;
 
 import java.text.DateFormat;
@@ -33,7 +32,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         try {
             String sql = "create table if not exists cell "
-                    + "(cell_name varchar(10) not null, usage_time int, datetime date(10) default current_timestamp)";
+                    + "(cell_name varchar(10) not null , usage_time int, datetime date(10) default current_timestamp)";
             db.execSQL(sql) ; // 테이블 생성
 
         }catch ( Exception e){
@@ -48,20 +47,20 @@ public class DBHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    //Table 데이터 입력
-    public void insert(String name) {
-        int check_data = 0;
-        SQLiteDatabase db = getWritableDatabase();
-        String str = "SELECT EXISTS (SELECT * FROM cell WHERE cell_name = '" + name + "' AND datetime = date('now', 'localtime'))";
-        Cursor cursor = db.rawQuery(str, null);
-        check_data = cursor.getInt(0);
-
-        if(check_data >= 1){
-            Update(name);
-        } else {
-            db.execSQL("INSERT INTO cell VALUES('" + name + "', " + 0 + ")");
-        }
-    }
+//    //Table 데이터 입력
+//    public void insert(String name) {
+//        int check_data = 0;
+//        SQLiteDatabase db = getWritableDatabase();
+//        String str = "SELECT EXISTS (SELECT * FROM cell WHERE cell_name = '" + name + "' AND datetime = date('now', 'localtime'))";
+//        Cursor cursor = db.rawQuery(str, null);
+//        check_data = cursor.getInt(0);
+//
+//        if(check_data >= 1){
+//            Update(name);
+//        } else {
+//            db.execSQL("INSERT INTO cell VALUES('" + name + "', " + 0 + ")");
+//        }
+//    }
 
     // Table 데이터 수정
     public void Update(String name) {
@@ -91,8 +90,29 @@ public class DBHelper extends SQLiteOpenHelper {
 //        db.close();
 //    }
 
+    public String getMost() {
+        // 읽기가 가능하게 DB 열기
+        SQLiteDatabase db = getReadableDatabase();
+        String str = "SELECT cell_name, sum(usage_time) FROM cell GROUP BY cell_name ORDER BY sum(usage_time) DESC";
+        String result = "";
+
+        // DB에 있는 데이터를 쉽게 처리하기 위해 Cursor를 사용하여 테이블에 있는 모든 데이터 출력
+        Cursor cursor = db.rawQuery(str, null);
+
+        while (cursor.moveToNext()) {
+            result += " Package Name : " + cursor.getString(0)
+                    + ", Usage Time : "
+                    + cursor.getString(1)
+                    + "\n";
+
+            Log.v("result", result);
+        }
+
+        return result;
+    }
+
     // Table 조회
-    public String getResult() {
+    public String getWeekResult() {
         // 읽기가 가능하게 DB 열기
         SQLiteDatabase db = getReadableDatabase();
         String result = "";
