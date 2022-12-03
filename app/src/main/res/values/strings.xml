@@ -15,4 +15,9 @@
     <string name="on">on</string>
 
     <string name="button">button</string>
+    <string name="time">Time</string>
+    <string name="save">Save</string>
+    <string name="every">Every</string>
+
+    <string name="help" >help</string>
 </resources>
