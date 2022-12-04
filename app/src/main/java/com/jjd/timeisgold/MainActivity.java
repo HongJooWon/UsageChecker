@@ -135,27 +135,29 @@ public class MainActivity extends AppCompatActivity {
         Button sbtn = (Button)findViewById(R.id.sbtn);
 
         //통계 버튼을 누르면 DB접근
-        sbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+           sbtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
                 //에딧 텍스트 값을 문자열로 바꾸어 함수에 넣어줍니다.
-                packinfo = dbHelper.getMost();
-                Log.v("pack name", packinfo);
+                    packinfo = dbHelper.getMost();
+                      Log.v("pack name", packinfo);
 //                Intent intent=new Intent(getApplicationContext(), Result.class);
 //                startActivity(intent);
-
-
-
-//              AddTime(android_id, packname, time, totalTime);
-
-                //go to the graph activity
-                Intent myIntent = new Intent(MainActivity.this,GraphActivity.class);
-                startActivity(myIntent);
-                finish();
+//
+//
+//
+////              AddTime(android_id, packname, time, totalTime);
+//
+               //go to the graph activity
+                    Intent myIntent = new Intent(MainActivity.this,GraphActivity.class);
+                    startActivity(myIntent);
+                    finish();
             }
+//
+//            //go the graph activity
+          });
 
-            //go the graph activity
-        });
+
 
         Switch sw = (Switch)findViewById(R.id.sw);
         sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
