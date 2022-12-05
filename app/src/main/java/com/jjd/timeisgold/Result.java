@@ -21,6 +21,7 @@ import com.github.mikephil.charting.charts.*;
 public class Result extends AppCompatActivity {
 
     TextInputLayout textInputLayout;
+
     AutoCompleteTextView autoCompleteTextView;
 
     TextView textShowItem;

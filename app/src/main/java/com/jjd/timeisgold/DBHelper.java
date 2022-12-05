@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import java.util.ArrayList;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -32,7 +33,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         try {
             String sql = "create table if not exists cell "
-                    + "(cell_name varchar(10) not null , usage_time int, datetime date(10) default current_timestamp)";
+                    + "(cell_name varchar(20) not null , usage_time int, datetime date(10) default current_timestamp)";
             db.execSQL(sql) ; // 테이블 생성
 
         }catch ( Exception e){
@@ -112,22 +113,78 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     // Table 조회
-    public String getWeekResult() {
+    public ArrayList getWeekResult(int checktype) {
         // 읽기가 가능하게 DB 열기
         SQLiteDatabase db = getReadableDatabase();
+        ArrayList<String> week_list = new ArrayList<>();
         String result = "";
 
         // DB에 있는 데이터를 쉽게 처리하기 위해 Cursor를 사용하여 테이블에 있는 모든 데이터 출력
-        Cursor cursor = db.rawQuery("SELECT * FROM cell", null);
-        while (cursor.moveToNext()) {
-            result += " Package Name : " + cursor.getString(0)
-                    + ", Date : "
-                    + cursor.getString(1)
-                    + ", Usage Time : "
-                    + cursor.getInt(2)
-                    + "\n";
+        Cursor cursor = db.rawQuery("SELECT datetime, sum(usage_time) FROM cell GROUP BY datetime HAVING datetime > date('now', '-7 days')", null);
+
+        if (checktype == 1) {
+            while (cursor.moveToNext()) {
+                result = cursor.getString(0);
+                week_list.add(result);
+            }
+        } else {
+            while (cursor.moveToNext()) {
+                result = cursor.getString(1);
+                week_list.add(result);
+            }
         }
 
-        return result;
+
+        return week_list;
+    }
+
+    public ArrayList getTwoWeekResult(int checktype) {
+        // 읽기가 가능하게 DB 열기
+        SQLiteDatabase db = getReadableDatabase();
+        ArrayList<String> week_list = new ArrayList<>();
+        String result = "";
+
+        // DB에 있는 데이터를 쉽게 처리하기 위해 Cursor를 사용하여 테이블에 있는 모든 데이터 출력
+        Cursor cursor = db.rawQuery("SELECT datetime, sum(usage_time) FROM cell GROUP BY datetime HAVING datetime > date('now', '-14 days')", null);
+
+        if (checktype == 1) {
+            while (cursor.moveToNext()) {
+                result = cursor.getString(0);
+                week_list.add(result);
+            }
+        } else {
+            while (cursor.moveToNext()) {
+                result = cursor.getString(1);
+                week_list.add(result);
+            }
+        }
+
+
+        return week_list;
+    }
+
+    public ArrayList getMonthResult(int checktype) {
+        // 읽기가 가능하게 DB 열기
+        SQLiteDatabase db = getReadableDatabase();
+        ArrayList<String> week_list = new ArrayList<>();
+        String result = "";
+
+        // DB에 있는 데이터를 쉽게 처리하기 위해 Cursor를 사용하여 테이블에 있는 모든 데이터 출력
+        Cursor cursor = db.rawQuery("SELECT datetime, sum(usage_time) FROM cell GROUP BY datetime HAVING datetime > date('now', '-30 days')", null);
+
+        if (checktype == 1) {
+            while (cursor.moveToNext()) {
+                result = cursor.getString(0);
+                week_list.add(result);
+            }
+        } else {
+            while (cursor.moveToNext()) {
+                result = cursor.getString(1);
+                week_list.add(result);
+            }
+        }
+
+
+        return week_list;
     }
 }
