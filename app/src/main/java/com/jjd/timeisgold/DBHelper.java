@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import java.util.ArrayList;
+import java.util.List;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -100,15 +101,18 @@ public class DBHelper extends SQLiteOpenHelper {
         // DB에 있는 데이터를 쉽게 처리하기 위해 Cursor를 사용하여 테이블에 있는 모든 데이터 출력
         Cursor cursor = db.rawQuery(str, null);
 
-        while (cursor.moveToNext()) {
-            result += " Package Name : " + cursor.getString(0)
-                    + ", Usage Time : "
-                    + cursor.getString(1)
-                    + "\n";
+        cursor.moveToNext();
 
-            Log.v("result", result);
-        }
+        result = cursor.getString(0);
+        Log.v("result", result);
 
+        //패키지 이름을 split으로 마지막 앱 이름만만
+        String[] array = result.split("[.]");
+        int last = array.length-1;
+
+        Log.v("result split", array[last]);
+
+        //앱 이름 리턴
         return result;
     }
 
