@@ -57,9 +57,11 @@ public class GraphActivity extends AppCompatActivity {
 
         int parse = 0;
 
-        for(int i=0; i<usage_vals.size(); i++){
-            parse = Integer.parseInt(usage_vals.get(i));
-            entry_chart.add(new BarEntry(i, parse));
+        if(usage_vals.size() > 0){
+            for(int i=0; i<usage_vals.size(); i++){
+                parse = Integer.parseInt(usage_vals.get(i));
+                entry_chart.add(new BarEntry(i, parse));
+            }
         }
 
 //        entry_chart.add(new BarEntry(1, 1)); //entry_chart1에 좌표 데이터를 담는다.

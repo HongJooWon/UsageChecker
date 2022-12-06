@@ -97,20 +97,28 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getReadableDatabase();
         String str = "SELECT cell_name, sum(usage_time) FROM cell GROUP BY cell_name ORDER BY sum(usage_time) DESC";
         String result = "";
+        int check_data = 0;
 
         // DB에 있는 데이터를 쉽게 처리하기 위해 Cursor를 사용하여 테이블에 있는 모든 데이터 출력
         Cursor cursor = db.rawQuery(str, null);
 
-        cursor.moveToNext();
+        check_data = cursor.getCount();
 
-        result = cursor.getString(0);
-        Log.v("result", result);
+        if(check_data > 0) {
+            cursor.moveToNext();
 
-        //패키지 이름을 split으로 마지막 앱 이름만만
-        String[] array = result.split("[.]");
-        int last = array.length-1;
+            result = cursor.getString(0);
+            Log.v("result", result);
 
-        Log.v("result split", array[last]);
+            //패키지 이름을 split으로 마지막 앱 이름만만
+            String[] array = result.split("[.]");
+            int last = array.length - 1;
+
+            Log.v("result split", array[last]);
+            result = array[last];
+        } else {
+            result = "nothing used";
+        }
 
         //앱 이름 리턴
         return result;

@@ -33,10 +33,16 @@ import android.app.AlertDialog;
 
 
 //파이어베이스 메소드 라이브러리
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.components.BuildConfig;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigInfo;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
+
+import com.google.android.gms.tasks.Task;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -114,6 +120,34 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        //파이어베이스 a/b 테스트 객체
+//        FirebaseRemoteConfig mfirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
+//        FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder()
+//                .setMinimumFetchIntervalInSeconds(0)
+//                        .build();
+//
+//        mfirebaseRemoteConfig.setConfigSettingsAsync(configSettings);
+//        mfirebaseRemoteConfig.setDefaultsAsync(R.xml.remote_config_defaults);
+//        mfirebaseRemoteConfig.fetchAndActivate()
+//                .addOnCompleteListener(new OnCompleteListener() {
+//                    @Override
+//                    public void onComplete(@NonNull Task task) {
+//                        if(task.isSuccessful()) {
+//                            boolean updated = task.isSuccessful();
+//                            Log.d("remote config", "updated: " + updated);
+//                        } else {
+//                            Log.d("remote config", "fetched failed");
+//
+//                        }
+//
+//                        FirebaseRemoteConfig mfirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
+//                        long version = mfirebaseRemoteConfig.getLong("version_number");
+//                        Log.d("remote config", "version:"+version);
+//                        updateUI((int)version);
+//
+//                    }
+//                });
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
