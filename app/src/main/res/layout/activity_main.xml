@@ -29,7 +29,7 @@
     <!--        app:layout_constraintTop_toBottomOf="@+id/start_button" />-->
 
     <TextView
-        android:id="@+id/text1"
+        android:id="@+id/text_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/time"
@@ -58,6 +58,7 @@
         tools:ignore="SpeakableTextPresentCheck" />
 
     <TextView
+        android:id="@+id/text_off"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
@@ -79,8 +80,9 @@
         android:layout_height="wrap_content"
         android:minHeight="48dp"
         android:text=""
-        android:textOff=""
-        android:textOn=""
+        android:showText="@string/off"
+        android:textOff="@string/off"
+        android:textOn="@string/on"
         android:thumb="@drawable/switch_thumb_selector"
         android:track="@drawable/switch_track_selector"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -92,6 +94,7 @@
         tools:ignore="MissingConstraints" />
 
     <TextView
+        android:id="@+id/text_on"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
@@ -121,7 +124,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/text_save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="173dp"
@@ -134,7 +137,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/text_every"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="169dp"
@@ -149,18 +152,50 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/button_help"
         android:layout_width="70dp"
         android:layout_height="52dp"
         android:layout_marginStart="331dp"
         android:layout_marginTop="84dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="595dp"
+        android:textSize="13sp"
         android:text="@string/help"
+        android:visibility="gone"
+        android:onClick="helpDialog"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/image_indicator"
+        android:layout_width="310dp"
+        android:layout_height="508dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="144dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="79dp"
+        android:visibility="gone"
+        android:onClick="changeTime"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/indicator" />
+
+    <ImageView
+        android:id="@+id/image_coin"
+        android:layout_width="137dp"
+        android:layout_height="236dp"
+        android:layout_marginStart="137dp"
+        android:layout_marginTop="66dp"
+        android:layout_marginEnd="137dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/coin" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

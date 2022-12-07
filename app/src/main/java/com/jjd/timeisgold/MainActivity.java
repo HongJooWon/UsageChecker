@@ -30,6 +30,9 @@ import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.app.AlertDialog;
+import android.widget.TextView;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 
 //파이어베이스 메소드 라이브러리
@@ -43,6 +46,8 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfigInfo;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 
 import com.google.android.gms.tasks.Task;
+
+import java.util.Arrays;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -122,32 +127,35 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         //파이어베이스 a/b 테스트 객체
-//        FirebaseRemoteConfig mfirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
-//        FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder()
-//                .setMinimumFetchIntervalInSeconds(0)
-//                        .build();
-//
-//        mfirebaseRemoteConfig.setConfigSettingsAsync(configSettings);
-//        mfirebaseRemoteConfig.setDefaultsAsync(R.xml.remote_config_defaults);
-//        mfirebaseRemoteConfig.fetchAndActivate()
-//                .addOnCompleteListener(new OnCompleteListener() {
-//                    @Override
-//                    public void onComplete(@NonNull Task task) {
-//                        if(task.isSuccessful()) {
-//                            boolean updated = task.isSuccessful();
-//                            Log.d("remote config", "updated: " + updated);
-//                        } else {
-//                            Log.d("remote config", "fetched failed");
-//
-//                        }
-//
-//                        FirebaseRemoteConfig mfirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
-//                        long version = mfirebaseRemoteConfig.getLong("version_number");
-//                        Log.d("remote config", "version:"+version);
-//                        updateUI((int)version);
-//
-//                    }
-//                });
+        FirebaseRemoteConfig mfirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
+        FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder()
+                .setMinimumFetchIntervalInSeconds(0)
+                        .build();
+
+        mfirebaseRemoteConfig.setConfigSettingsAsync(configSettings);
+        mfirebaseRemoteConfig.setDefaultsAsync(R.xml.remote_config_defaults);
+        mfirebaseRemoteConfig.fetchAndActivate()
+                .addOnCompleteListener(new OnCompleteListener() {
+                    @Override
+                    public void onComplete(@NonNull Task task) {
+                        if(task.isSuccessful()) {
+                            boolean updated = task.isSuccessful();
+                            Log.d("remote config", "updated: " + updated);
+                        } else {
+                            Log.d("remote config", "fetched failed");
+
+                        }
+
+                        FirebaseRemoteConfig mfirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
+                        long version = mfirebaseRemoteConfig.getLong("version_number");
+                        Log.d("remote config", "version:"+version);
+                        updateUI((int)version);
+
+                    }
+                });
+
+
+
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -422,4 +430,56 @@ public class MainActivity extends AppCompatActivity {
         return event.getEventType() == UsageEvents.Event.MOVE_TO_FOREGROUND;
     }
 
+    // method to change version of application
+    private void updateUI( int versionCode){
+        if (versionCode == 2) {
+           TextView v1_text1 = (TextView)findViewById(R.id.text_every);
+           TextView v1_text2 = (TextView)findViewById(R.id.text_time);
+           TextView v1_text3 = (TextView)findViewById(R.id.text_save);
+           TextView v1_text4 = (TextView)findViewById(R.id.text_on);
+           TextView v1_text5 = (TextView)findViewById(R.id.text_off);
+           Switch v1_switch = (Switch)findViewById(R.id.sw);
+           v1_text1.setVisibility(View.GONE);
+           v1_text2.setVisibility(View.GONE);
+           v1_text3.setVisibility(View.GONE);
+           v1_text4.setVisibility(View.GONE);
+           v1_text5.setVisibility(View.GONE);
+           v1_switch.setVisibility(View.GONE);
+
+           Button v2_btn = (Button)findViewById(R.id.button_help);
+           ImageView v2_image1 = (ImageView)findViewById(R.id.image_indicator);
+           ImageView v2_image2 = (ImageView)findViewById(R.id.image_coin);
+           v2_btn.setVisibility(View.VISIBLE);
+           v2_image1.setVisibility(View.VISIBLE);
+           Switch sw = (Switch)findViewById(R.id.sw);
+           if(sw.getTextOff()=="on"){
+               v2_image2.setVisibility(View.VISIBLE);
+           } else {
+               v2_image2.setVisibility(View.GONE);
+           }
+
+
+
+        }
+    }
+    // time change method for version 2
+    public void changeTime(View view){
+        AlertDialog.Builder timeDialog = new AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Light_Dialog_Alert);
+        timeDialog.setTitle("Choose your term to alarm youself ").setItems(items, new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialog, int which){
+                Toast.makeText(getApplicationContext(), items[which], Toast.LENGTH_LONG).show();
+                selectedTime = times[Arrays.asList(items).indexOf(items[which])];
+        }
+    })
+                .setCancelable(false)
+                .show();
+    }
+    // to show help message for help button of version 2
+    public void helpDialog(View view){
+        AlertDialog.Builder helpDlog = new AlertDialog.Builder(this);
+        helpDlog.setTitle("Hel[").setMessage("This will help you to understand using this app");
+        AlertDialog alertDialog = helpDlog.create();
+        alertDialog.show();
+    }
 }
