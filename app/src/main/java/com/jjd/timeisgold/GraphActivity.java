@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.graphics.Color;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.AxisBase;
@@ -89,6 +90,11 @@ public class GraphActivity extends AppCompatActivity {
         XAxis xAxis = barChart.getXAxis();
         barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(xAxisLabel));
 
+        //getmost usage app
+
+        TextView bottomLine = (TextView)findViewById(R.id.text_mostUse);
+        String mostUsage = dbHelper.getMost();
+        bottomLine.setText("This week's most Usage app is : "+mostUsage);
     }
 
     }

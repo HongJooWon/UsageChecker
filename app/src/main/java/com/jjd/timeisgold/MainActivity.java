@@ -478,7 +478,7 @@ public class MainActivity extends AppCompatActivity {
     // to show help message for help button of version 2
     public void helpDialog(View view){
         AlertDialog.Builder helpDlog = new AlertDialog.Builder(this);
-        helpDlog.setTitle("Hel[").setMessage("This will help you to understand using this app");
+        helpDlog.setTitle("Help").setMessage("This will help you to understand using this app");
         AlertDialog alertDialog = helpDlog.create();
         alertDialog.show();
     }
