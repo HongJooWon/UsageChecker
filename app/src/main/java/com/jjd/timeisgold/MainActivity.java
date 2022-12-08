@@ -438,13 +438,13 @@ public class MainActivity extends AppCompatActivity {
            TextView v1_text3 = (TextView)findViewById(R.id.text_save);
            TextView v1_text4 = (TextView)findViewById(R.id.text_on);
            TextView v1_text5 = (TextView)findViewById(R.id.text_off);
-           Switch v1_switch = (Switch)findViewById(R.id.sw);
+           Spinner v1_spinner = (Spinner)findViewById(R.id.spinner);
            v1_text1.setVisibility(View.GONE);
            v1_text2.setVisibility(View.GONE);
            v1_text3.setVisibility(View.GONE);
            v1_text4.setVisibility(View.GONE);
            v1_text5.setVisibility(View.GONE);
-           v1_switch.setVisibility(View.GONE);
+           v1_spinner.setVisibility(View.GONE);
 
            Button v2_btn = (Button)findViewById(R.id.button_help);
            ImageView v2_image1 = (ImageView)findViewById(R.id.image_indicator);
@@ -478,7 +478,17 @@ public class MainActivity extends AppCompatActivity {
     // to show help message for help button of version 2
     public void helpDialog(View view){
         AlertDialog.Builder helpDlog = new AlertDialog.Builder(this);
-        helpDlog.setTitle("Help").setMessage("This will help you to understand using this app");
+        helpDlog.setTitle("How to Use").setMessage("First\n" +
+                "Touch the indicator icon\n" +
+                "and select the time that you want to alarm\n" +
+                "Second\n" +
+                "turn the switch to red side\n" +
+                "Third\n" +
+                "this application will alarm you every time you select\n" +
+                "while you using your smartphone\n" +
+                "So that you can handle and manage your time and be free from smartphone\n" +
+                "MAKE YOUR TIME WORTHY WITH THIS APP\n" +
+                "Tim is Gold!");
         AlertDialog alertDialog = helpDlog.create();
         alertDialog.show();
     }
