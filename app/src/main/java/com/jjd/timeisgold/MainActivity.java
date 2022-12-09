@@ -93,7 +93,8 @@ public class MainActivity extends AppCompatActivity {
                 .setContentTitle("From TIG")
                 .setContentText("You should stop Using your Phone!")
                 .setPriority(androidx.core.app.NotificationCompat.PRIORITY_DEFAULT)
-                .setAutoCancel(true);
+                .setAutoCancel(true)
+                .setVibrate(new long[]{0,500,250,500,250,1000});
 
         NotificationManagerCompat managerCompat = NotificationManagerCompat.from(MainActivity.this);
         managerCompat.notify(1,builder.build());
