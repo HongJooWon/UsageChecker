@@ -97,6 +97,6 @@ public class GraphActivity extends AppCompatActivity {
         bottomLine.setText("This week's most Usage app is : "+mostUsage);
     }
 
-    }
+}
 
 

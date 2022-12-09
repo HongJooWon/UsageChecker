@@ -153,11 +153,11 @@
 
     <Button
         android:id="@+id/button_help"
-        android:layout_width="70dp"
-        android:layout_height="52dp"
-        android:layout_marginStart="331dp"
+        android:layout_width="74dp"
+        android:layout_height="57dp"
+        android:layout_marginStart="330dp"
         android:layout_marginTop="84dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginEnd="7dp"
         android:layout_marginBottom="595dp"
         android:onClick="helpDialog"
         android:text="@string/help"
@@ -165,13 +165,15 @@
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
         android:id="@+id/image_indicator"
-        android:layout_width="310dp"
-        android:layout_height="508dp"
+        android:layout_width="296dp"
+        android:layout_height="261dp"
         android:layout_marginStart="51dp"
         android:layout_marginTop="144dp"
         android:layout_marginEnd="50dp"
@@ -180,8 +182,10 @@
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.428"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.368"
         app:srcCompat="@drawable/indicator" />
 
     <ImageView

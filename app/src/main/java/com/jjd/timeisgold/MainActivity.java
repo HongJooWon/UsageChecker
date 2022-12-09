@@ -157,6 +157,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -187,7 +188,6 @@ public class MainActivity extends AppCompatActivity {
                 //go to the graph activity
                 Intent myIntent = new Intent(MainActivity.this,GraphActivity.class);
                 startActivity(myIntent);
-                finish();
             }
 
             //go the graph activity
