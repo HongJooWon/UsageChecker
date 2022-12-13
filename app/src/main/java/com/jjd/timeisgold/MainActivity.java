@@ -218,11 +218,23 @@ public class MainActivity extends AppCompatActivity {
                         checkPackageNameThread = new CheckPackageNameThread();
                         checkPackageNameThread.start();
                     }
+                    //동전 보여주기
+                    ImageView v2_image2 = (ImageView)findViewById(R.id.image_coin);
+                    if(v2_image2.getVisibility()==View.INVISIBLE){
+                        v2_image2.setVisibility(View.VISIBLE);
+                    }
+
+
                 }else {
                     bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "switch off");
                     bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "Switch handling");
                     analytics.logEvent("Switch_Off", bundle);
                     operation = false;
+                    //동전끄기
+                    ImageView v2_image2 = (ImageView)findViewById(R.id.image_coin);
+                    if(v2_image2.getVisibility()==View.VISIBLE){
+                        v2_image2.setVisibility(View.INVISIBLE);
+                    }
                 }
             }
         });
@@ -452,15 +464,7 @@ public class MainActivity extends AppCompatActivity {
            ImageView v2_image2 = (ImageView)findViewById(R.id.image_coin);
            v2_btn.setVisibility(View.VISIBLE);
            v2_image1.setVisibility(View.VISIBLE);
-           Switch sw = (Switch)findViewById(R.id.sw);
-           if(sw.getTextOff()=="on"){
-               v2_image2.setVisibility(View.VISIBLE);
-           } else {
-               v2_image2.setVisibility(View.GONE);
-           }
-
-
-
+           v2_image2.setVisibility(View.INVISIBLE);
         }
     }
     // time change method for version 2
