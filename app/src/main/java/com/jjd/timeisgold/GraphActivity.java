@@ -49,10 +49,10 @@ public class GraphActivity extends AppCompatActivity {
 
         usage_vals = dbHelper.getWeekResult(2);
 
-        ArrayList<BarEntry> entry_chart = new ArrayList<>(); // 데이터를 담을 Arraylist
+        ArrayList<BarEntry> entry_chart = new ArrayList<>(); // Arraylist for data
         barChart = (BarChart) findViewById(R.id.chart);
 
-        BarData barData = new BarData(); // 차트에 담길 데이터
+        BarData barData = new BarData(); // Data to be included in the chart
 
         int parse = 0;
 
@@ -65,16 +65,16 @@ public class GraphActivity extends AppCompatActivity {
 
 
 
-        BarDataSet barDataSet = new BarDataSet(entry_chart, "bardataset"); // 데이터가 담긴 Arraylist 를 BarDataSet 으로 변환한다.
+        BarDataSet barDataSet = new BarDataSet(entry_chart, "bardataset"); // Convert an Arraylist containing data to a BarDataSet.
 
-        barDataSet.setColor(Color.BLUE); // 해당 BarDataSet 색 설정 :: 각 막대 과 관련된 세팅은 여기서 설정한다.
+        barDataSet.setColor(Color.BLUE); // Set the corresponding BarDataSet color: The settings associated with each bar are set here.
 
-        barData.addDataSet(barDataSet); // 해당 BarDataSet 을 적용될 차트에 들어갈 DataSet 에 넣는다.
+        barData.addDataSet(barDataSet); // Put the corresponding BarDataSet into the DataSet to be placed in the chart to be applied.
 
-        barChart.setData(barData); // 차트에 위의 DataSet 을 넣는다.
+        barChart.setData(barData); // Put the DataSet above in the chart.
 
-        barChart.invalidate(); // 차트 업데이트
-        barChart.setTouchEnabled(false); // 차트 터치 불가능하게
+        barChart.invalidate(); // Update Chart
+        barChart.setTouchEnabled(false); // unable to touch the chart
 
         xAxisLabel = dbHelper.getWeekResult(1);
 

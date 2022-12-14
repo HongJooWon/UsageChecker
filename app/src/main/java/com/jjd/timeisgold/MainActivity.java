@@ -31,7 +31,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 
-//파이어베이스 메소드 라이브러리
+//firebase libraries
 //import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.components.BuildConfig;
 //import com.google.firebase.database.DatabaseReference;
@@ -154,12 +154,14 @@ public class MainActivity extends AppCompatActivity {
 
         createNotificationsChannels();
 
-        //데이터 베이스 오브젝트 생성
+        //create database object
         dbHelper = new DBHelper(MainActivity.this, 1);
+
+        //get firebase instanceID
         analytics = FirebaseAnalytics.getInstance(this);
 
 
-
+        //help button
         Button helpBtn = (Button)findViewById(R.id.button_help);
 
         helpBtn.setOnClickListener(new View.OnClickListener(){
@@ -169,15 +171,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // 버튼 정의
-        //Button start_button = findViewById(R.id.start_button);
+        // Statistics button
         Button sbtn = (Button)findViewById(R.id.sbtn);
 
-        //통계 버튼을 누르면 DB접근
+        // if click, graphactivity page appears
         sbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //에딧 텍스트 값을 문자열로 바꾸어 함수에 넣어줍니다.
+                //get the most used app name from database
                 packinfo = dbHelper.getMost();
                 Log.v("pack name", packinfo);
 
@@ -195,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 Bundle bundle = new Bundle(); // logEvent()까지 추가
 
-
+                //if the switch is true
                 if(isChecked){
                     bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "switch on");
                     bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "Switch handling");
@@ -205,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
                         Intent PermissionIntent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS, Uri.parse("package:" + getPackageName()));
                         startActivity(PermissionIntent);
                     }
-                    // 권환 허용 되어 있으면 현재 포그라운드 앱 패키지 로그로 띄운다.
+                    // if there is an accept of permission proceed the thread of UsageStatManager
                     else{
 
                         //SCREEN_INTERACTIVE
@@ -213,19 +214,19 @@ public class MainActivity extends AppCompatActivity {
                         checkPackageNameThread = new CheckPackageNameThread();
                         checkPackageNameThread.start();
                     }
-                    //동전 보여주기
+                    //Show coin image
                     ImageView v2_image2 = (ImageView)findViewById(R.id.image_coin);
                     if(v2_image2.getVisibility()==View.INVISIBLE){
                         v2_image2.setVisibility(View.VISIBLE);
                     }
 
-
+                //if the switch is off
                 }else {
                     bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "switch off");
                     bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "Switch handling");
                     analytics.logEvent("Switch_Off", bundle);
                     operation = false;
-                    //동전끄기
+                    //coin image disappears
                     ImageView v2_image2 = (ImageView)findViewById(R.id.image_coin);
                     if(v2_image2.getVisibility()==View.VISIBLE){
                         v2_image2.setVisibility(View.INVISIBLE);
@@ -238,22 +239,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    // 현재 포그라운드 앱 패키지 로그로 띄우는 함수
+    // function that detects the foreground app package every 3 second
     public class CheckPackageNameThread extends Thread{
 
         public void run(){
-            // operation == true 일때만 실행
+            // work when operation == true
             while(operation){
                 if(!checkPermission())
                     continue;
 
 
-                // 현재 포그라운드 앱 패키지 이름 가져오기
-//                System.out.println(getPackageName(getApplicationContext()));
 
                 try {
-                    // 5초마다 패키치 이름을 로그창에 출력
-                    
+                    // check app package every 3 second
                     //화면 사용하지 않을 경우 실행 정지
                     if(isScreenOn()){
                         Log.v("Usage", "Using");
@@ -265,12 +263,12 @@ public class MainActivity extends AppCompatActivity {
                     }
                         sleep(3000);
                         nowTime +=3;
-                        //지정 시간마다 데이터 베이스 업데이트
+                        //insert time data to data base
                         dbHelper.Update(getPackageName(MainActivity.this));
                         if(nowTime == selectedTime){
                             //alarm and allocate nowTime to 0;
                             displayNotification();
-                            //여기에 작동시킬 함수 넣기
+                            //if time is up, proceed the function
                             runOnUiThread(new Runnable(){
                                 @Override
                                 public void run() {
@@ -312,50 +310,49 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    // 자신의 앱의 최소 타겟을 롤리팝 이전으로 설정
-    // 현재 포그라운드 앱 패키지를 가져오는 함수
+    // fuction that gets foreground app package name
     public static String getPackageName(@NonNull Context context) {
 
-        // UsageStatsManager 선언
+        //create UsageStatsManager
         UsageStatsManager usageStatsManager = (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
 
-        // 마지막 실행 앱 타임스탬프
+        //last app timestamp
         long lastRunAppTimeStamp = 0L;
 
         // fixed time as the user set
 //        long user_time = 0;
 
-        // 얼마만큼의 시간동안 수집한 앱의 이름을 가져오는지 정하기 (begin ~ end 까지의 앱 이름을 수집한다)
-        final long INTERVAL = 1000 * 60 * 3; // 여기다 시간 분단위 user_time로 받아서 집어넣기
+        // To determine how long to get the name of the app you collected (collect the name of the app from begin to end)
+        final long INTERVAL = 1000 * 60 * 3;
         final long end = System.currentTimeMillis();
-        final long begin = end - INTERVAL; // 5분전
+        final long begin = end - INTERVAL;
 
 
         LongSparseArray packageNameMap = new LongSparseArray<>();
 
-        // 수집한 이벤트들을 담기 위한 UsageEvents
+        // UsageEvents to contain collected events
         final UsageEvents usageEvents = usageStatsManager.queryEvents(begin, end);
 
-        // 이벤트가 여러개 있을 경우 (최소 존재는 해야 hasNextEvent가 null이 아니니까)
+        // If there are multiple events (asNextEvent should be at least present, since it is not null)
         while (usageEvents.hasNextEvent()) {
 
-            // 현재 이벤트를 가져오기
+            // Get the current event
             UsageEvents.Event event = new UsageEvents.Event();
             usageEvents.getNextEvent(event);
 
-            // 현재 이벤트가 포그라운드 상태라면(현재 화면에 보이는 앱이라면)
+            // If the current event is foreground (if the app is currently on the screen)
             if(isForeGroundEvent(event)) {
 
-                // 해당 앱 이름을 packageNameMap에 넣는다.
+                // Put the app name in the packageNameMap.
                 packageNameMap.put(event.getTimeStamp(), event.getPackageName());
 
-                // 가장 최근에 실행 된 이벤트에 대한 타임스탬프를 업데이트 해준다.
+                // Updates the timestamp for the most recently executed event.
                 if(event.getTimeStamp() > lastRunAppTimeStamp) {
                     lastRunAppTimeStamp = event.getTimeStamp();
                 }
             }
         }
-        // 가장 마지막까지 있는 앱의 이름을 리턴해준다.
+        // Returns the name of the last app.
         return packageNameMap.get(lastRunAppTimeStamp, "").toString();
     }
 
