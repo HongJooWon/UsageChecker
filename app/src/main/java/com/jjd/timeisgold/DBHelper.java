@@ -130,14 +130,17 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getReadableDatabase();
         ArrayList<String> week_list = new ArrayList<>();
         String result = "";
+        String str="";
 
         // DB에 있는 데이터를 쉽게 처리하기 위해 Cursor를 사용하여 테이블에 있는 모든 데이터 출력
-        Cursor cursor = db.rawQuery("SELECT datetime, sum(usage_time) FROM cell GROUP BY datetime HAVING datetime > date('now', '-7 days')", null);
+        Cursor cursor = db.rawQuery("SELECT datetime, sum(usage_time) FROM cell GROUP BY datetime ORDER BY ROWID LIMIT 7", null);
 
         if (checktype == 1) {
             while (cursor.moveToNext()) {
                 result = cursor.getString(0);
-                week_list.add(result);
+                str = result.substring(5);
+                Log.v("result:", str);
+                week_list.add(str);
             }
         } else {
             while (cursor.moveToNext()) {

@@ -41,8 +41,6 @@ public class GraphActivity extends AppCompatActivity {
         button_home.setOnClickListener(new  View.OnClickListener(){
            @Override
             public void onClick(View v){
-               Intent myIntent = new Intent(GraphActivity.this,MainActivity.class);
-               startActivity(myIntent);
                finish();
            }
 
