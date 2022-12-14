@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
     private NotificationManagerCompat notificationManager;
 
     String[] items = {"5min","10min","15min","20min","25min","30min"};
-    int[] times = {15,600,900,1200,1500,1800};
+    int[] times = {3,600,900,1200,1500,1800};
     int selectedTime;
     int nowTime=0;
     int totalTime = 0;
@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        finish();
+                        dialogInterface.dismiss();
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -225,14 +225,12 @@ public class MainActivity extends AppCompatActivity {
                     bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "Switch handling");
                     analytics.logEvent("Switch_Off", bundle);
                     operation = false;
-                    nowTime = 0;
-                    Log.v("switch off", "is off");
-                    checkPackageNameThread.currentThread().interrupt();
                     //동전끄기
                     ImageView v2_image2 = (ImageView)findViewById(R.id.image_coin);
                     if(v2_image2.getVisibility()==View.VISIBLE){
                         v2_image2.setVisibility(View.INVISIBLE);
                     }
+                    nowTime=0;
                 }
             }
         });
@@ -269,7 +267,7 @@ public class MainActivity extends AppCompatActivity {
                         nowTime +=3;
                         //지정 시간마다 데이터 베이스 업데이트
                         dbHelper.Update(getPackageName(MainActivity.this));
-                        if(nowTime >= selectedTime){
+                        if(nowTime == selectedTime){
                             //alarm and allocate nowTime to 0;
                             displayNotification();
                             //여기에 작동시킬 함수 넣기
@@ -279,7 +277,7 @@ public class MainActivity extends AppCompatActivity {
                                     showDialog();
                                 }
                             });
-                            nowTime = 0;
+                            nowTime=0;
                         }
 
                 } catch (InterruptedException e) {
