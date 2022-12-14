@@ -65,13 +65,6 @@ public class GraphActivity extends AppCompatActivity {
             }
         }
 
-//        entry_chart.add(new BarEntry(1, 1)); //entry_chart1에 좌표 데이터를 담는다.
-//        entry_chart.add(new BarEntry(2, 2));
-//        entry_chart.add(new BarEntry(3, 3));
-//        entry_chart.add(new BarEntry(4, 4));
-//        entry_chart.add(new BarEntry(5, 2));
-//        entry_chart.add(new BarEntry(6, 8));
-//        entry_chart.add(new BarEntry(7, 8));
 
 
         BarDataSet barDataSet = new BarDataSet(entry_chart, "bardataset"); // 데이터가 담긴 Arraylist 를 BarDataSet 으로 변환한다.

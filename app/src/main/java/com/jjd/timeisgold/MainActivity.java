@@ -429,45 +429,45 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
-    // 앱이 포그라운드 상태인지 체크
+    // check app is foreground or not
     private static boolean isForeGroundEvent(UsageEvents.Event event) {
 
-        // 이벤트가 없으면 false 반환
+        // if there is no event return false
         if(event == null)
             return false;
 
-        // 이벤트가 포그라운드 상태라면 true 반환
+        // if event is foreground return true
         if(BuildConfig.VERSION_CODE >= 29)
             return event.getEventType() == UsageEvents.Event.ACTIVITY_RESUMED;
 
         return event.getEventType() == UsageEvents.Event.MOVE_TO_FOREGROUND;
     }
 
-    // method to change version of application
-    private void updateUI( int versionCode){
-        if (versionCode == 2) {
-           TextView v1_text1 = (TextView)findViewById(R.id.text_every);
-           TextView v1_text2 = (TextView)findViewById(R.id.text_time);
-           TextView v1_text3 = (TextView)findViewById(R.id.text_save);
-           TextView v1_text4 = (TextView)findViewById(R.id.text_on);
-           TextView v1_text5 = (TextView)findViewById(R.id.text_off);
-           Spinner v1_spinner = (Spinner)findViewById(R.id.spinner);
-           v1_text1.setVisibility(View.GONE);
-           v1_text2.setVisibility(View.GONE);
-           v1_text3.setVisibility(View.GONE);
-           v1_text4.setVisibility(View.GONE);
-           v1_text5.setVisibility(View.GONE);
-           v1_spinner.setVisibility(View.GONE);
-
-           Button v2_btn = (Button)findViewById(R.id.button_help);
-           ImageView v2_image1 = (ImageView)findViewById(R.id.image_indicator);
-           ImageView v2_image2 = (ImageView)findViewById(R.id.image_coin);
-           v2_btn.setVisibility(View.VISIBLE);
-           v2_image1.setVisibility(View.VISIBLE);
-           v2_image2.setVisibility(View.INVISIBLE);
-        }
-    }
-    // time change method for version 2
+    // method to change version of application for A/B testing
+//    private void updateUI( int versionCode){
+//        if (versionCode == 2) {
+//           TextView v1_text1 = (TextView)findViewById(R.id.text_every);
+//           TextView v1_text2 = (TextView)findViewById(R.id.text_time);
+//           TextView v1_text3 = (TextView)findViewById(R.id.text_save);
+//           TextView v1_text4 = (TextView)findViewById(R.id.text_on);
+//           TextView v1_text5 = (TextView)findViewById(R.id.text_off);
+//           Spinner v1_spinner = (Spinner)findViewById(R.id.spinner);
+//           v1_text1.setVisibility(View.GONE);
+//           v1_text2.setVisibility(View.GONE);
+//           v1_text3.setVisibility(View.GONE);
+//           v1_text4.setVisibility(View.GONE);
+//           v1_text5.setVisibility(View.GONE);
+//           v1_spinner.setVisibility(View.GONE);
+//
+//           Button v2_btn = (Button)findViewById(R.id.button_help);
+//           ImageView v2_image1 = (ImageView)findViewById(R.id.image_indicator);
+//           ImageView v2_image2 = (ImageView)findViewById(R.id.image_coin);
+//           v2_btn.setVisibility(View.VISIBLE);
+//           v2_image1.setVisibility(View.VISIBLE);
+//           v2_image2.setVisibility(View.INVISIBLE);
+//        }
+//    }
+    // time change method
     public void changeTime(View view){
         AlertDialog.Builder timeDialog = new AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Light_Dialog_Alert);
         timeDialog.setTitle("Choose your term to alarm youself ").setItems(items, new DialogInterface.OnClickListener(){
@@ -480,19 +480,22 @@ public class MainActivity extends AppCompatActivity {
                 .setCancelable(false)
                 .show();
     }
-    // to show help message for help button of version 2
+    // to show help message for help button
     public void helpDialog(View view){
         AlertDialog.Builder helpDlog = new AlertDialog.Builder(this);
         helpDlog.setTitle("How to Use").setMessage("First\n" +
                 "Touch the indicator icon\n" +
                 "and select the time that you want to alarm\n" +
+                "\n"+
                 "Second\n" +
                 "turn the switch to red side\n" +
+                "\n"+
                 "Third\n" +
                 "this application will alarm you every time you select\n" +
                 "while you using your smartphone\n" +
                 "So that you can handle and manage your time and be free from smartphone\n" +
                 "MAKE YOUR TIME WORTHY WITH THIS APP\n" +
+                "\n"+
                 "Tim is Gold!");
         AlertDialog alertDialog = helpDlog.create();
         alertDialog.show();
