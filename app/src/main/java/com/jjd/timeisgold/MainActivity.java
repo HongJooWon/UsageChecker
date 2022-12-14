@@ -23,29 +23,25 @@ import android.util.Log;
 import android.util.LongSparseArray;
 import android.view.Display;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.Spinner;
 import android.widget.Switch;
 import android.app.AlertDialog;
-import android.widget.TextView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 
 //파이어베이스 메소드 라이브러리
-import com.google.android.gms.tasks.OnCompleteListener;
+//import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.components.BuildConfig;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+//import com.google.firebase.database.DatabaseReference;
+//import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
-import com.google.firebase.remoteconfig.FirebaseRemoteConfigInfo;
-import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
+//import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
+//import com.google.firebase.remoteconfig.FirebaseRemoteConfigInfo;
+//import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 
-import com.google.android.gms.tasks.Task;
+//import com.google.android.gms.tasks.Task;
 
 import java.util.Arrays;
 
@@ -59,11 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
     DBHelper dbHelper;
 
-    private Context mContext;
-    //Notification Channel
-//    private static String CHANNEL_ID;
-//    private static final String CHANNEL_NAME = "Time Notification";
-//    private static final String CHANNEL_DESC = "Time Notification";
+
     private NotificationManagerCompat notificationManager;
 
     String[] items = {"5min","10min","15min","20min","25min","30min"};
@@ -127,37 +119,33 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        //파이어베이스 a/b 테스트 객체
-        FirebaseRemoteConfig mfirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
-        FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder()
-                .setMinimumFetchIntervalInSeconds(0)
-                        .build();
-
-        mfirebaseRemoteConfig.setConfigSettingsAsync(configSettings);
-        mfirebaseRemoteConfig.setDefaultsAsync(R.xml.remote_config_defaults);
-        mfirebaseRemoteConfig.fetchAndActivate()
-                .addOnCompleteListener(new OnCompleteListener() {
-                    @Override
-                    public void onComplete(@NonNull Task task) {
-                        if(task.isSuccessful()) {
-                            boolean updated = task.isSuccessful();
-                            Log.d("remote config", "updated: " + updated);
-                        } else {
-                            Log.d("remote config", "fetched failed");
-
-                        }
-
-                        FirebaseRemoteConfig mfirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
-                        long version = mfirebaseRemoteConfig.getLong("version_number");
-                        Log.d("remote config", "version:"+version);
-                        updateUI((int)version);
-
-                    }
-                });
-
-
-
-
+        //Firebase A/B testing  call
+//        FirebaseRemoteConfig mfirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
+//        FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder()
+//                .setMinimumFetchIntervalInSeconds(0)
+//                        .build();
+//
+//        mfirebaseRemoteConfig.setConfigSettingsAsync(configSettings);
+//        mfirebaseRemoteConfig.setDefaultsAsync(R.xml.remote_config_defaults);
+//        mfirebaseRemoteConfig.fetchAndActivate()
+//                .addOnCompleteListener(new OnCompleteListener() {
+//                    @Override
+//                    public void onComplete(@NonNull Task task) {
+//                        if(task.isSuccessful()) {
+//                            boolean updated = task.isSuccessful();
+//                            Log.d("remote config", "updated: " + updated);
+//                        } else {
+//                            Log.d("remote config", "fetched failed");
+//
+//                        }
+//
+//                        FirebaseRemoteConfig mfirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
+//                        long version = mfirebaseRemoteConfig.getLong("version_number");
+//                        Log.d("remote config", "version:"+version);
+//                        updateUI((int)version);
+//
+//                    }
+//                });
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -172,7 +160,14 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+        Button helpBtn = (Button)findViewById(R.id.button_help);
 
+        helpBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                helpDialog(view);
+            }
+        });
 
         // 버튼 정의
         //Button start_button = findViewById(R.id.start_button);
@@ -239,61 +234,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // 시작 버튼 이벤트
-//            start_button.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//
-//                    // 권환 허용이 안되어 있으면 권환 설정창으로 이동
-//                    if(!checkPermission()) {
-//                        Intent PermissionIntent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS, Uri.parse("package:" + getPackageName()));
-//                        startActivity(PermissionIntent);
-//                    }
-//                    // 권환 허용 되어 있으면 현재 포그라운드 앱 패키지 로그로 띄운다.
-//                    else{
-//                        //SCREEN_INTERACTIVE
-//                        operation = true;
-//                        checkPackageNameThread = new CheckPackageNameThread();
-//                        checkPackageNameThread.start();
-//                    }
-//
-//                }
-//            });
-
-        // 종료 버튼 이벤트
-//        end_button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                operation = false;
-//            }
-    //});
-
-        //Spinner UI set
-        Spinner spinner = (Spinner) findViewById(R.id.spinner);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                this, android.R.layout.simple_spinner_item,items
-        );
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
-
-            @Override
-            public void  onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                selectedTime =times[i];
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                selectedTime =times[0];
-            }
-        });
-
     }
-
-
-
-
 
 
     // 현재 포그라운드 앱 패키지 로그로 띄우는 함수

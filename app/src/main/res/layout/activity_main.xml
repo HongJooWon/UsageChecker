@@ -28,52 +28,6 @@
     <!--        app:layout_constraintEnd_toEndOf="@+id/start_button"-->
     <!--        app:layout_constraintTop_toBottomOf="@+id/start_button" />-->
 
-    <TextView
-        android:id="@+id/text_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/time"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.35"
-        tools:ignore="MissingConstraints" />
-
-    <Spinner
-        android:id="@+id/spinner"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="100dp"
-        android:minHeight="48dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.55"
-        tools:ignore="SpeakableTextPresentCheck" />
-
-    <TextView
-        android:id="@+id/text_off"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_marginEnd="28dp"
-        android:layout_toStartOf="@+id/sw"
-        android:text="@string/off"
-        android:textColor="#000000"
-        android:textSize="50sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/sw"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.795"
-        tools:ignore="MissingConstraints" />
-
     <Switch
         android:id="@+id/sw"
         android:layout_width="wrap_content"
@@ -93,23 +47,6 @@
         app:layout_constraintVertical_bias="0.8"
         tools:ignore="MissingConstraints" />
 
-    <TextView
-        android:id="@+id/text_on"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_marginStart="28dp"
-        android:layout_toEndOf="@+id/sw"
-        android:text="@string/on"
-        android:textColor="#FF0000"
-        android:textSize="50sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/sw"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.795"
-        tools:ignore="MissingConstraints" />
-
     <Button
         android:id="@+id/sbtn"
         android:layout_width="70dp"
@@ -123,52 +60,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/text_save"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="173dp"
-        android:layout_marginTop="302dp"
-        android:layout_marginEnd="174dp"
-        android:text="@string/save"
-        android:textSize="30sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/text_every"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="169dp"
-        android:layout_marginTop="362dp"
-        android:layout_marginEnd="170dp"
-        android:layout_marginBottom="329dp"
-        android:text="@string/every"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <Button
         android:id="@+id/button_help"
-        android:layout_width="74dp"
+        android:layout_width="70dp"
         android:layout_height="57dp"
-        android:layout_marginStart="330dp"
+        android:layout_marginStart="320dp"
         android:layout_marginTop="84dp"
-        android:layout_marginEnd="7dp"
-        android:layout_marginBottom="595dp"
+        android:layout_marginEnd="20dp"
         android:onClick="helpDialog"
         android:text="@string/help"
         android:textSize="13sp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/image_indicator"
@@ -178,8 +82,8 @@
         android:layout_marginTop="144dp"
         android:layout_marginEnd="50dp"
         android:layout_marginBottom="79dp"
+        android:contentDescription="@string/discription"
         android:onClick="changeTime"
-        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.428"
@@ -193,10 +97,10 @@
         android:layout_width="137dp"
         android:layout_height="236dp"
         android:layout_marginStart="137dp"
-        android:layout_marginTop="66dp"
+        android:layout_marginTop="40dp"
         android:layout_marginEnd="137dp"
         android:layout_marginBottom="429dp"
-        android:visibility="gone"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
